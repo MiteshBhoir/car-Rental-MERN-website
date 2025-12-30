@@ -7,7 +7,7 @@ const Hero = () => {
   const { pickupDate, setPickupDate, returnDate, setReturnDate, navigate } = useAppContext();
   const handleSearch = (e) => {
     e.preventDefault();
-    navigate(`/cars?location=${encodeURIComponent(pickupLocation)}&pickupDate=${pickupDate}&returnDate=${returnDate}`)
+    navigate("/cars?pickupLocation="+pickupLocation+"&pickupDate="+pickupDate+"&returnDate="+returnDate)
   }
   return (
     <motion.div

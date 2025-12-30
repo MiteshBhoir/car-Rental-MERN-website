@@ -15,7 +15,8 @@ const Cars = () => {
 
   const [input, setInput] = useState("");
   const { cars, axios } = useAppContext();
-  const isSearchData = pickupDate && pickupLocation && returnDate;
+
+  const isSearchData = pickupLocation && pickupDate && returnDate;
   const [filteredCars, setFilteredCars] = useState([]);
   const applyFilter = async () => {
     if (input === "") {
@@ -31,21 +32,20 @@ const Cars = () => {
     setFilteredCars(filtered)
   }
   const searchCarAvailability = async () => {
-    const { data } = await axios.get('/api/bookings/check-availability', {
-      params: { location: pickupLocation, pickupDate, returnDate }
-    })
+    const { data } = await axios.post('/api/bookings/check-availability', { location: pickupLocation, pickupDate, returnDate })
     if (data.success) {
-      setFilteredCars(data.availableCars);
-      if (data.availableCars.length === 0) {
+      setFilteredCars(data.availablecars);
+      if (data.availablecars.length === 0) {
         toast("No Cars Available")
       }
       return null;
     }
   }
 
-  useEffect(() => {
+  useEffect(()=>{
     isSearchData && searchCarAvailability()
-  }, []);
+  },[])
+
   useEffect(() => {
     cars.length > 0 && !isSearchData && applyFilter()
   }, [input, cars])
@@ -74,17 +74,17 @@ const Cars = () => {
 
         className='px-6 md:px-16 lg:px-24 xl:px-32 mt-10'>
         <p className='text-gray-500 xl:px-20 max-w-7xl mx-auto'>Showing {filteredCars.length} Cars</p>
-        <motiondiv className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-4 xl:px-20 max-w-7xl mx-auto'>
+        <motion.div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-4 xl:px-20 max-w-7xl mx-auto'>
           {filteredCars.map((car, index) => (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1*index, duration: 0.4 }}
+              transition={{ delay: 0.1 * index, duration: 0.4 }}
               key={index}>
               <CarCard Car={car} />
             </motion.div>
           ))}
-        </motiondiv>
+        </motion.div>
       </motion.div>
     </div>
   )

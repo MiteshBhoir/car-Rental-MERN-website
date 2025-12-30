@@ -25,10 +25,10 @@ export const checkAvailabilityOfCar = async (req, res) => {
         pickupDate,
         returnDate
       );
-      return { ...car._doc, isAvailable: isAvailable };
+      return { ...car._doc, isAvailable};
     });
     let availablecars = await Promise.all(availableCarsPromise);
-    availablecars = availablecars.filter((car) => car.isAvailable === true);
+    availablecars = availablecars.filter((car) => car.isAvailable);
     res.json({ success: true, availablecars });
   } catch (error) {
     console.log(error.message);
